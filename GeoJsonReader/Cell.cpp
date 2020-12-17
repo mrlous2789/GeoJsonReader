@@ -30,5 +30,10 @@ void Cell::PrintProperties()
 	std::cout << "Province: " << province << std::endl;
 	std::cout << "Culture: " << culture << std::endl;
 	std::cout << "Religion: " << religion << std::endl;
-	std::cout << "Neighbors: " << neighbors.back() << std::endl;
+	std::cout << "Neighbors: ";
+	for (int i = 0; i < neighbors.size(); i++)
+	{
+		std::cout << neighbors[i] << ", ";
+	}
+	std::cout << std::endl;
 }

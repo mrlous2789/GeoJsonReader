@@ -75,15 +75,15 @@ bool Reader::ReadFile(std::string filename)
 			else if (line.find("\"neighbors\":") != std::string::npos)
 			{
 				int start = line.find_first_of('[');
+				std::string neighbor = "";
 				for (int i = start; i < line.size(); i++)
 				{
-					std::string neighbor = "";
-					if (line.at(i) == ',')
+					if (line.at(i) == ',' || line.at(i) == ']')
 					{
 						neighbors.push_back(ConvertToInt(neighbor));
 						neighbor = "";
 					}
-					else if (line.at(i) == ']' || line.at(i) == '[')
+					else if (line.at(i) == '[')
 					{
 
 					}
@@ -95,8 +95,9 @@ bool Reader::ReadFile(std::string filename)
 			}
 			else if (line == "},")
 			{
-				std::cout << "Im here" << std::endl;
 				cells.push_back(Cell(coords, id, height, biome, type, population, state, province, culture, religion, neighbors));
+				neighbors.clear();
+				coords.clear();
 			}
 			//Cell cell = Cell(coords, id, height, biome, type, population, state, province, culture, religion, neighbors);
 
@@ -146,7 +147,7 @@ int Reader::ConvertToInt(std::string line)
 	}
 	catch (const std::exception&)
 	{
-		std::cout << "Error converting: " << line << std::endl;
+		std::cout << "Error converting: " << line << " to int" << std::endl;
 		return 0;
 	}
 }
@@ -159,7 +160,7 @@ double Reader::ConvertToDouble(std::string line)
 	}
 	catch (const std::exception&)
 	{
-		std::cout << "Error converting: " << line << std::endl;
+		std::cout << "Error converting: " << line << " to double" <<std::endl;
 		return 0.0f;
 	}
 }
