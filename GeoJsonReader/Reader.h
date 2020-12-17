@@ -13,6 +13,8 @@ public:
 	bool ReadFile(std::string filename);
 
 	void PrintData();
+
+	void PrintDataByID(int id);
 private:
 	bool reading = true;
 

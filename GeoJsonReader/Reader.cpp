@@ -171,3 +171,11 @@ void Reader::PrintData()
 	cells[19].PrintProperties();
 	cells[456].PrintProperties();
 }
+void Reader::PrintDataByID(int id)
+{
+	if (cells[id].id == id)
+	{
+		cells[id].PrintProperties();
+	}
+}
+
