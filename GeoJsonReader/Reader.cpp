@@ -15,33 +15,28 @@ bool Reader::ReadFile(std::string filename)
 	{
 		std::string line;
 		std::cout << "File: " + filename + " opened" << std::endl;
-		int id = 0, height = 0, biome = 0, population = 0, state = 0, province = 0, culture = 0, religion = 0;
-		
-		std::string type;
-		std::vector<int> neighbors;
 
-		std::vector<std::pair<double, double>> coords;
-		
-		int linenum = 0;
+		//temp properties
+		int id = 0, height = 0, biome = 0, population = 0, state = 0, province = 0, culture = 0, religion = 0;	
+		std::string type;
+		std::vector<int> neighbors;//temp neighbors vector
+		std::vector<std::pair<double, double>> coords;//temp coords vectore
 		
 		while (std::getline(file, line))
 		{			
-			//linenum++;
-			//std::cout << linenum << std::endl;
-			//std::cout << line << std::endl;
 			if (line.find("\"geometry\":") != std::string::npos)
 			{
-				int start = line.find_first_of('[');
+				int start = line.find_first_of('[');//find the start of the coordinates
 				std::string coord = "";
 				double x = 0.0f, y = 0.0f;
 				bool xcoord = true;
 				for (int i = start; i < line.size(); i++)
 				{
-					if (line.at(i) == '[' || line.at(i) == ']')
+					if (line.at(i) == '[' || line.at(i) == ']')//if a [ or ] do nothing
 					{
 
 					}
-					else if (line.at(i) == ',')
+					else if (line.at(i) == ',')// a ',' seperates each coord so when appears save coord string to variable then empty it
 					{
 						if (xcoord)
 						{
@@ -49,7 +44,7 @@ bool Reader::ReadFile(std::string filename)
 							xcoord = false;
 							coord = "";
 						}
-						else
+						else//if its the y coord then we already have the x coord so save onto temp coords vector
 						{
 							y = ConvertToDouble(coord);
 							coords.push_back({ x,y });
@@ -57,7 +52,7 @@ bool Reader::ReadFile(std::string filename)
 							coord = "";
 						}
 					}
-					else
+					else//build up coord
 					{
 						coord += line.at(i);
 					}
@@ -74,20 +69,20 @@ bool Reader::ReadFile(std::string filename)
 			else if (line.find("\"religion\":") != std::string::npos) { religion = ConvertToInt(GetProperty(line)); }
 			else if (line.find("\"neighbors\":") != std::string::npos)
 			{
-				int start = line.find_first_of('[');
+				int start = line.find_first_of('[');//find start of neighbors ids
 				std::string neighbor = "";
 				for (int i = start; i < line.size(); i++)
 				{
-					if (line.at(i) == ',' || line.at(i) == ']')
+					if (line.at(i) == ',' || line.at(i) == ']')// a ',' seperates each id so save id to neighbors vector and a ']' is for the last id
 					{
 						neighbors.push_back(ConvertToInt(neighbor));
 						neighbor = "";
 					}
-					else if (line.at(i) == '[')
+					else if (line.at(i) == '[')//do nothing
 					{
 
 					}
-					else
+					else//build up id
 					{
 						neighbor += line.at(i);
 					}
@@ -95,7 +90,7 @@ bool Reader::ReadFile(std::string filename)
 			}
 			else if (line == "},")
 			{
-				cells.push_back(Cell(coords, id, height, biome, type, population, state, province, culture, religion, neighbors));
+				cells.push_back(Cell(coords, id, height, biome, type, population, state, province, culture, religion, neighbors));//add cell to cells vector
 				neighbors.clear();
 				coords.clear();
 			}
@@ -115,7 +110,7 @@ bool Reader::ReadFile(std::string filename)
 
 }
 
-std::pair<int, int> Reader::FindFirstAndLast(std::string line)
+std::pair<int, int> Reader::FindFirstAndLast(std::string line)//finding the position of the data in string
 {
 	int last = line.find_last_of("\"");
 	int first = 0;
@@ -131,7 +126,7 @@ std::pair<int, int> Reader::FindFirstAndLast(std::string line)
 	return std::pair<int, int>(first, last);
 }
 
-std::string Reader::GetProperty(std::string line)
+std::string Reader::GetProperty(std::string line)//isolate the data that we actually want essentially just removing ""
 {
 	std::pair<int, int> firstLast = FindFirstAndLast(line);
 	std::string propertyString = line.substr(firstLast.first, firstLast.second - firstLast.first);
@@ -140,7 +135,7 @@ std::string Reader::GetProperty(std::string line)
 
 int Reader::ConvertToInt(std::string line)
 {
-	try
+	try//try converting data to integer
 	{
 		int prop = std::stoi(line);
 		return prop;
@@ -153,9 +148,9 @@ int Reader::ConvertToInt(std::string line)
 }
 double Reader::ConvertToDouble(std::string line)
 {
-	try
+	try//try converting data to double
 	{
-		double prop = std::stof(line);
+		double prop = std::stod(line);
 		return prop;
 	}
 	catch (const std::exception&)
@@ -171,7 +166,7 @@ void Reader::PrintData()
 	cells[19].PrintProperties();
 	cells[456].PrintProperties();
 }
-void Reader::PrintDataByID(int id)
+void Reader::PrintDataByID(int id)//cells are sorted and ids increment by one every time so finding data is very quick and simple
 {
 	if (cells[id].id == id)
 	{

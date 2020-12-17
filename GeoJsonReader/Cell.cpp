@@ -21,6 +21,12 @@ Cell::Cell(std::vector<std::pair<double, double>> inCoords, int inId, int inHeig
 
 void Cell::PrintProperties()
 {
+	std::cout << "Coordinates: ";
+	for (int i = 0; i < coords.size(); i++)
+	{
+		std::cout << "[x= " << coords[i].first << ", y= " << coords[i].second << "] ";
+	}
+	std::cout << std::endl;
 	std::cout << "ID: " << id << std::endl;
 	std::cout << "Height: " << height << std::endl;
 	std::cout << "Biome: " << biome << std::endl;
