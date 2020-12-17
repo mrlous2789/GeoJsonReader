@@ -6,8 +6,10 @@ class Cell
 {	
 public:
 	Cell();
-	Cell(std::vector<float[2]> inCoords, int inId, int inHeight, int inBiome, std::string inType, int inPopulation, int inState, int inProvince, int inCulture, int inReligion, std::vector<int> inNeighbors);
-	std::vector<float[2]> coords;
+	Cell(std::vector<std::pair<double, double>> inCoords, int inId, int inHeight, int inBiome, std::string inType, int inPopulation, int inState, int inProvince, int inCulture, int inReligion, std::vector<int> inNeighbors);
+	void PrintProperties();
+
+	std::vector<std::pair<double, double>> coords;
 	int id;
 	int height;
 	int biome;
